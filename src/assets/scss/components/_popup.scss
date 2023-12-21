@@ -1,0 +1,76 @@
+.theme-popup{
+    &.create-group-popup,
+    &.start-chat-popup{
+        .img-wrapper{
+            width: 40px;
+            height: 40px;
+            min-width: 40px;
+            overflow: hidden;
+            border-radius: 50%;
+
+            img{
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+        }
+
+        .chat-search{
+            padding: 0;
+        }
+
+        .custom-check-box,
+        .custom-check-radio{
+            padding: 10px 10px 10px 10px;
+            border-radius: 5px;
+        }
+
+        .form-check{
+            display: flex;
+            align-items: center;
+        }
+
+        .form-check-label{
+            width: 100%;
+            margin-left: 16px;
+        }
+
+        .submit-btn{
+            cursor: pointer;
+            width: 50px;
+            height: 50px;
+            min-width: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: $color-blue;
+            color: $color-white;
+
+        }
+
+        .custom-check-radio{
+            &:has(.form-check-input:checked){
+                background-color: $color-blue;
+                color: $color-white;
+            }
+        }
+        
+        .form-check-input{
+            box-shadow: none;
+
+            &:checked{
+                background-color: $color-black;
+            }
+
+            &:focus{
+                box-shadow: none;
+            }
+        }
+
+        .users-listing{
+            height: 300px;
+            overflow-y: auto;
+        }
+    }
+}

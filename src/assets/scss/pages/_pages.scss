@@ -1,0 +1,20 @@
+.pages{
+    &.chat-page{
+        height: 100vh;
+        overflow: hidden;
+
+        .left-panel{
+            height: 100vh;
+            border-right: 1px solid $color-border;
+
+            .chat-users-list{
+                height: 100%;
+                overflow-y: auto;
+            }
+        }
+
+        .right-panel{
+            height: 100vh;
+        }
+    }
+}

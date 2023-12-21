@@ -1,0 +1,16 @@
+.auth {
+    width: 100%;
+
+    &.signin-form {
+        a {
+            font-weight: 700;
+            color: $color-blue;
+        }
+
+        .link-wrapper {
+            span {
+                cursor: pointer;
+            }
+        }
+    }
+}

@@ -1,0 +1,94 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Cabin', sans-serif;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-family: 'Ruda', sans-serif;
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+::-webkit-scrollbar-track {
+    background: $color-white;
+}
+
+::-webkit-scrollbar-thumb {
+    background: $color-border;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+    margin: 0;
+}
+
+a {
+    color: unset;
+    text-decoration: none;
+}
+
+ul {
+    padding: 0;
+    margin: 0;
+
+    li {
+        list-style: none;
+    }
+}
+
+.container,
+.container-fluid {}
+
+// remove blue backgroup chrome autocomplete
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px $color-white inset !important;
+}
+
+// cursor
+.cursor {
+    cursor: pointer;
+}
+
+.text-black {
+    color: $color-black;
+}
+
+.text-grey {
+    color: $color-grey;
+}
+
+.text-white {
+    color: $color-white;
+}
+
+.fw-400 {
+    font-weight: 400;
+}
+
+.fw-500 {
+    font-weight: 500;
+}
+
+.fw-600 {
+    font-weight: 600;
+}
+
+.fw-700 {
+    font-weight: 700;
+}
+
+.fw-800 {
+    font-weight: 800;
+}
+
+// If using react-select, react-date-picker, floating label than give styling here
