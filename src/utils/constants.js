@@ -4,7 +4,7 @@ export const constant = {
     LOCAL_STORAGE_TOKEN: "CHAT_TOKEN",
     LOCAL_STORAGE_USER: "CHAT_USER",
     LOCAL_STORAGE_ROLE: "",
-    BASE_URL: "http://localhost:4000/api",
+    BASE_URL: "http://localhost:4000",
     IMAGE_DIR_NAME: "images",
     VIDEO_DIR_NAME: "videos"
 }
@@ -17,8 +17,19 @@ export const messageTypes = {
     doc: 5,
 }
 
+export const roles = {
+    admin: 1,
+    user: 2
+}
+
 export const apiUrl = {
-    login: '/auth/login',
+    uploadFile:'/api/file/upload-file',
+    login: '/api/auth/login',
+    chatUsers: '/api/chat/get-chat-users',
+    messages: '/api/chat/get-messages',
+    searchUsers: '/api/chat/search-users',
+    startChat: '/api/chat/start-chat',
+    createGroup: "/api/chat/create-group",
 }
 
 export const s3Credential = {

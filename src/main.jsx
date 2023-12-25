@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import "./assets/scss/styles.css"
-import store from './store/store.js'
+import {store} from './store/store.js'
 import { Provider } from 'react-redux'
 import { ToastContainer } from 'react-toastify'
 
