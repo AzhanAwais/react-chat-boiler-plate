@@ -16,7 +16,7 @@
         }
     }
 
-    .dropdown{
+    .dropdown {
         right: -5px;
     }
 
@@ -151,8 +151,6 @@
             }
         }
     }
-
-
 }
 
 .no-chat-selected {
@@ -255,8 +253,8 @@
     padding: 16px;
     height: calc(100vh - 180px);
 
-    &.is-file{
-        height: calc(100vh - 280px);        
+    &.is-file {
+        height: calc(100vh - 280px);
     }
 
     .my-message {
@@ -316,7 +314,6 @@
                 border-radius: 5px;
             }
         }
-
     }
 }
 
@@ -353,7 +350,9 @@
 
     .react-emoji-picker--wrapper {
         left: 0;
-        box-shadow: rgba(145, 158, 171, 0.3) 0px 0px 2px 0px, rgba(145, 158, 171, 0.12) 0px 12px 24px -4px;
+        box-shadow:
+            rgba(145, 158, 171, 0.3) 0px 0px 2px 0px,
+            rgba(145, 158, 171, 0.12) 0px 12px 24px -4px;
         border-radius: 5px;
     }
 
@@ -375,7 +374,6 @@
             border: none;
         }
     }
-
 }
 
 .message-box {
@@ -399,5 +397,56 @@
         border-radius: 5px;
         background-color: $color-blue;
         color: $color-white;
+    }
+}
+
+.file-icon-box {
+    .dropdown {
+        &:focus-within {
+            outline: none;
+        }
+
+        .dropdown-toggle {
+            background-color: transparent;
+            border: none;
+            &:focus-within {
+                box-shadow: none;
+            }
+        }
+
+        .dropdown-menu {
+            right: 15px !important;
+            border: none;
+            background-color: transparent;
+
+            &.show {
+                display: flex;
+                align-items: end;
+                justify-content: end;
+                flex-direction: column;
+            }
+        }
+    }
+
+    .circle {
+        width: 40px;
+        height: 40px;
+        min-width: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &.blue {
+            background-color: $color-blue;
+        }
+
+        &.green {
+            background-color: $color-green;
+        }
+
+        &.orange {
+            background-color: $color-orange;
+        }
     }
 }

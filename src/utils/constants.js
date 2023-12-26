@@ -23,13 +23,14 @@ export const roles = {
 }
 
 export const apiUrl = {
-    uploadFile:'/api/file/upload-file',
+    uploadFile: '/api/file/upload-file',
     login: '/api/auth/login',
     chatUsers: '/api/chat/get-chat-users',
     messages: '/api/chat/get-messages',
     searchUsers: '/api/chat/search-users',
     startChat: '/api/chat/start-chat',
     createGroup: "/api/chat/create-group",
+    sendMessage: "/api/chat/send-message",
 }
 
 export const s3Credential = {

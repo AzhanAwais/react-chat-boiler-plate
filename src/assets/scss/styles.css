@@ -449,6 +449,46 @@ input:-webkit-autofill:active {
   color: #FFFFFF;
 }
 
+.file-icon-box .dropdown:focus-within {
+  outline: none;
+}
+.file-icon-box .dropdown .dropdown-toggle {
+  background-color: transparent;
+  border: none;
+}
+.file-icon-box .dropdown .dropdown-toggle:focus-within {
+  box-shadow: none;
+}
+.file-icon-box .dropdown .dropdown-menu {
+  right: 15px !important;
+  border: none;
+  background-color: transparent;
+}
+.file-icon-box .dropdown .dropdown-menu.show {
+  display: flex;
+  align-items: end;
+  justify-content: end;
+  flex-direction: column;
+}
+.file-icon-box .circle {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.file-icon-box .circle.blue {
+  background-color: #5D87FF;
+}
+.file-icon-box .circle.green {
+  background-color: #13DEB9;
+}
+.file-icon-box .circle.orange {
+  background-color: #FA896B;
+}
+
 .form-control {
   border: 1px solid #e1e1e1;
 }

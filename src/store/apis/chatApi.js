@@ -32,6 +32,13 @@ export const chatApi = apiSlice
                     body: data
                 })
             }),
+            sendMessage: builder.mutation({
+                query: (data) => ({
+                    url: `${apiUrl.sendMessage}`,
+                    method: 'POST',
+                    body: data
+                })
+            }),
         }),
     })
 
@@ -41,5 +48,6 @@ export const {
     useLazyGetMessagesQuery,
     useLazySearchUsersQuery,
     useStartChatMutation,
-    useCreateGroupMutation
+    useCreateGroupMutation,
+    useSendMessageMutation,
 } = chatApi

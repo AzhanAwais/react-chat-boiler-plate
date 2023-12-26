@@ -1,16 +1,98 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import InputEmoji from "react-input-emoji"
 import { IoAttachSharp } from "react-icons/io5";
 import { IoMdSend } from "react-icons/io";
+import { messageTypes } from '../../utils/constants';
+import FileIconBox from './FileIconBox';
+import Loader from '../loader/Loader';
+import { useSendMessageMutation } from '../../store/apis/chatApi';
+import { GetAuthUserLocalStorage } from '../../services/localStorage/localStorage';
+import { setMessages } from '../../store/slices/chatSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { useUploadFileMutation } from '../../store/apis/uploadFileApi';
+import { Button } from 'react-bootstrap';
 
-const MessageInput = ({ message, setMessage, files, setFiles, onSubmit }) => {
+const MessageInput = ({ message, setMessage, files, setFiles }) => {
+    const [show, setShow] = useState(false)
+    const [messageType, setMessageType] = useState(messageTypes.text)
+    const dispatch = useDispatch()
+    const currUser = GetAuthUserLocalStorage()
+    const [sendMessage, { isLoading }] = useSendMessageMutation()
+    const [uploadFile] = useUploadFileMutation()
+    const { selectedChat } = useSelector((state) => state?.chat)
+
     const handleFileChange = (e) => {
         setFiles([...files, ...e.target.files])
+        setShow(false)
     }
 
-    const sendMessage = async () => {
+    const uploadFiles = async (formData) => {
+        let formdata = new FormData()
 
+        for (let i = 0; i < files?.length; i++) {
+            formdata.append("file", files[i])
+            const { data, error } = await uploadFile(formdata)
+            if (data) {
+                if (messageType == messageTypes.image) {
+                    formdata.images = [...formdata.images, data?.data]
+                }
+                else if (messageType == messageTypes.video) {
+                    formdata.videos = [...formdata.videos, data?.data]
+                }
+                else if (messageType == messageTypes.doc) {
+                    formdata.docs = [...formdata.videos, {
+                        name: files[i]?.name,
+                        url: data?.data
+                    }]
+                }
+                else if (messageType == messageTypes.audio) {
+                    formdata.audio = data?.data
+                    delete formData?.message
+                }
+            }
+        }
+
+        return formData
     }
+
+    const resetForm = () => {
+        setFiles([])
+        setMessage('')
+        setMessageType(messageTypes.text)
+    }
+
+    const handleSendMessage = async () => {
+        let formData = {
+            chatId: selectedChat?.data?._id,
+            sender: currUser?._id,
+            receiver: selectedChat?.user?._id,
+            messageType: messageType,
+            message: message
+        }
+
+        if (selectedChat?.data?.isGroupChat) {
+            delete formData.receiver
+        }
+
+        if (files?.length > 0) {
+            formData = await uploadFiles(formData)
+        }
+
+        const { data, error } = await sendMessage(formData)
+        if (data) {
+            dispatch(setMessages(data?.data))
+            resetForm()
+        }
+        else {
+            errorMsg(error.data.message)
+        }
+    }
+
+    useEffect(() => {
+        if (files?.length <= 0) {
+            setMessageType(messageTypes.text)
+        }
+    }, [files])
 
     return (
         <div className='message-input'>
@@ -24,14 +106,17 @@ const MessageInput = ({ message, setMessage, files, setFiles, onSubmit }) => {
                 </div>
 
                 <div className="d-flex align-items-center">
-                    <div className="ms-3" onClick={onSubmit}>
-                        <IoMdSend className='icon' />
-                    </div>
+                    <Button disabled={isLoading} className="ms-3" onClick={handleSendMessage}>
+                        {isLoading ? <Loader /> : <IoMdSend className='icon' />}
+                    </Button>
 
-                    <label className='icon-wrapper ms-1' htmlFor="file">
-                        <input className='d-none' multiple type="file" id='file' onChange={handleFileChange} />
-                        <IoAttachSharp className='icon' />
-                    </label>
+                    <div onClick={() => setShow(!show)}>
+                        <FileIconBox
+                            handleFileChange={handleFileChange}
+                            setMessageType={setMessageType}
+                            show={show}
+                        />
+                    </div>
                 </div>
             </div>
         </div>

@@ -27,11 +27,11 @@ export const chatSlice = createSlice({
     reducers: {
         setChatsUserList: (state, action) => {
             state.chatsUserList.isLoading = action?.payload?.isLoading
-            state.chatsUserList.data = action?.payload?.data
+            state.chatsUserList.data = [...state.chatsUserList.data, action?.payload?.data]
         },
         setMessages: (state, action) => {
             state.messages.isLoading = action?.payload?.isLoading
-            state.messages.data = action?.payload?.data
+            state.messages.data = [...state.messages.data, action?.payload?.data]
         },
         setSearchUsers: (state, action) => {
             state.searchUsers.isLoading = action?.payload?.isLoading
