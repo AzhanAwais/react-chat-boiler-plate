@@ -1,5 +1,5 @@
 export const VALIDATIONS = {
-    NAME_MIN:3,
+    NAME_MIN: 3,
     NAME_MAX: 20,
     EMAIL: 30,
     PASSWORD_MIN: 8,
@@ -11,18 +11,26 @@ export const VALIDATIONS = {
     VERIFICATION_CODE: 4,
     CARD_NUMBER: 16,
     CVV: 3,
+    GROUP_NAME_MIN: 3,
+    GROUP_NAME_MAX: 32,
+    GROUP_DESCRIPTION_MAX: 120
 }
 
 export const VALIDATIONS_TEXT = {
     USER_NAME_REQUIRED: "Username is required",
     USER_NAME_FORMAT: "Username may only contain letters and numbers",
 
+    GROUP_DESCRIPTION_MAX: `Description: Maximum ${VALIDATIONS.GROUP_DESCRIPTION_MAX} characters are allowed`,
+    GROUP_NAME_MIN: "Min length is " + VALIDATIONS.GROUP_NAME_MIN,
+    GROUP_NAME_MAX: "Min length is " + VALIDATIONS.GROUP_NAME_MAX,
+    GROUP_NAME_REQUIRED: "Group name is required",
+
     NAME_REQUIRED: "Name is required",
     NAME_MIN: "Min length is " + VALIDATIONS.NAME_MIN,
     NAME_MAX: "Max length is " + VALIDATIONS.NAME_MAX,
 
     FULL_NAME_REQUIRED: "Full name is required",
-    
+
     EMAIL_REQUIRED: "Email is required",
     EMAIL_MAX: "Max length is " + VALIDATIONS.EMAIL,
     EMAIL_FORMAT: "Invalid email format",
@@ -31,7 +39,7 @@ export const VALIDATIONS_TEXT = {
     CURRENT_PASSWORD_REQUIRED: "Current password is required",
     NEW_PASSWORD_REQUIRED: "New password is required",
     CONFIRM_PASSWORD_REQUIRED: "Confirm password is required",
-    
+
     PASSWORD_REQUIRED: "Password is required",
     PASSWORD_MIN: "Min length is " + VALIDATIONS.PASSWORD_MIN,
     PASSWORD_MAX: "Max length is " + VALIDATIONS.PASSWORD_MAX,

@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { forwardRef } from 'react'
 import { Form } from 'react-bootstrap'
 
-const CustomTextarea = ((props, ref) => {
+const CustomTextarea = forwardRef((props, ref) => {
     const { field, label, placeholder, required, minLength, maxLength, value, onChange, disabled } = props
 
     return (

@@ -481,6 +481,20 @@ input:-webkit-autofill:active {
   -o-object-fit: cover;
      object-fit: cover;
 }
+.theme-popup.create-group-popup .file-uploader-wrapper, .theme-popup.start-chat-popup .file-uploader-wrapper {
+  width: 80px;
+  height: 80px;
+  min-width: 80px;
+  overflow: hidden;
+  border-radius: 50%;
+  border: 2px dashed #808080;
+}
+.theme-popup.create-group-popup .file-uploader-wrapper img, .theme-popup.start-chat-popup .file-uploader-wrapper img {
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
 .theme-popup.create-group-popup .chat-search, .theme-popup.start-chat-popup .chat-search {
   padding: 0;
 }

@@ -4,8 +4,11 @@ import { DropdownButton } from 'react-bootstrap'
 import { BsThreeDotsVertical } from 'react-icons/bs'
 import StartChatPopup from '../popup/StartChatPopup'
 import CreateGroupPopup from '../popup/CreateGroupPopup'
+import { GetAuthUserLocalStorage } from '../../services/localStorage/localStorage'
+import { getImageUrl, getUserRole } from '../../utils/helper'
 
 const MyProfile = () => {
+    const currUser = GetAuthUserLocalStorage()
     const [startChatPopup, setStartChatPopup] = useState(false)
     const [createGroupPopup, setCreateGroupPopup] = useState(false)
 
@@ -15,12 +18,12 @@ const MyProfile = () => {
                 <div className="d-flex align-items-center justify-content-between">
                     <div className="d-flex align-items-center">
                         <div className="img-wrapper">
-                            <img src={Assets.UserImg1} alt="" onError={(e) => e.target.src = Assets.ProfilePlaceholder} />
+                            <img src={getImageUrl(currUser?.profileImage, true)} alt="" onError={(e) => e.target.src = Assets.ProfilePlaceholder} />
                         </div>
 
                         <div className="content ms-3">
-                            <p className='text-black fw-600'>John Doe</p>
-                            <span className='text-grey'>Marketing Manager</span>
+                            <p className='text-black fw-600 text-capitalize'>{currUser?.fullname}</p>
+                            <span className='text-grey'>{getUserRole(currUser?.role)}</span>
                         </div>
                     </div>
 
