@@ -27,7 +27,6 @@ const StartChatPopup = ({ startChatPopup, setStartChatPopup }) => {
     const [startChat, { isLoading: isStartChatLoading }] = useStartChatMutation()
 
     const onSubmit = async (formData) => {
-        console.log(formData)
         const apiData = {
             receiver: formData?.user,
             sender: currUser?._id

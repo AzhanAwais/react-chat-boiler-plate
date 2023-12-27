@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useUploadFileMutation } from '../../store/apis/uploadFileApi';
 import { Button } from 'react-bootstrap';
 import { errorMsg } from '../../constants/msg'
+import { getBlockStatus } from '../../utils/helper';
 
 const MessageInput = ({ message, setMessage, files, setFiles }) => {
     const [show, setShow] = useState(false)
@@ -36,7 +37,7 @@ const MessageInput = ({ message, setMessage, files, setFiles }) => {
         for (let i = 0; i < files?.length; i++) {
             let formdata = new FormData()
             formdata.append("file", files[i])
-            
+
             const { data, error } = await uploadFile(formdata)
             if (data) {
                 if (messageType == messageTypes.image) {
@@ -116,29 +117,37 @@ const MessageInput = ({ message, setMessage, files, setFiles }) => {
     }, [files])
 
     return (
-        <div className='message-input'>
+        <div className={`message-input ${getBlockStatus(selectedChat) ? 'p-0' : ''}`}>
             <div className="d-flex align-items-center">
-                <div className='w-100'>
-                    <InputEmoji
-                        value={message}
-                        onChange={setMessage}
-                        placeholder="Type a message"
-                    />
-                </div>
+                {
+                    getBlockStatus(selectedChat) ?
+                        <div className='bg-danger w-100 p-4 text-white'>You have blocked this user. Please unblock to continue chat.</div>
+                        :
+                        <>
+                            <div className='w-100'>
+                                <InputEmoji
+                                    value={message}
+                                    onChange={setMessage}
+                                    placeholder="Type a message"
+                                />
+                            </div>
 
-                <div className="d-flex align-items-center">
-                    <Button disabled={isLoading} className="mx-3" onClick={handleSendMessage}>
-                        {isLoading ? <Loader /> : <IoMdSend className='icon' />}
-                    </Button>
+                            <div className="d-flex align-items-center">
+                                <Button disabled={isLoading} className="mx-3" onClick={handleSendMessage}>
+                                    {isLoading ? <Loader /> : <IoMdSend className='icon' />}
+                                </Button>
 
-                    <div onClick={() => setShow(!show)}>
-                        <FileIconBox
-                            handleFileChange={handleFileChange}
-                            setMessageType={setMessageType}
-                            show={show}
-                        />
-                    </div>
-                </div>
+                                <div onClick={() => setShow(!show)}>
+                                    <FileIconBox
+                                        handleFileChange={handleFileChange}
+                                        setMessageType={setMessageType}
+                                        show={show}
+                                    />
+                                </div>
+                            </div>
+                        </>
+                }
+
             </div>
         </div>
     )

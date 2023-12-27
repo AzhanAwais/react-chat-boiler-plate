@@ -32,6 +32,10 @@ export const apiUrl = {
     createGroup: "/api/chat/create-group",
     sendMessage: "/api/chat/send-message",
     deleteMessage: "/api/chat/delete-message",
+    deleteMessage: "/api/chat/delete-message",
+    blockChatUser: "/api/chat/block-user",
+    unblockChatUser: "/api/chat/unblock-user",
+    deleteChat: "/api/chat/delete-chat",
 }
 
 export const s3Credential = {

@@ -72,7 +72,7 @@ input:-webkit-autofill:active {
   -webkit-box-shadow: 0 0 0 30px #FFFFFF inset !important;
 }
 
-.fade:not(.show) {
+div .fade:not(.show) {
   opacity: 1;
 }
 
@@ -580,10 +580,6 @@ input:-webkit-autofill:active {
   border: none;
   padding: 10px;
   box-shadow: rgba(145, 158, 171, 0.3) 0px 0px 2px 0px, rgba(145, 158, 171, 0.12) 0px 12px 24px -4px;
-}
-
-#viewerBackdrop figure {
-  background-color: #FFFFFF;
 }
 
 .form-control {

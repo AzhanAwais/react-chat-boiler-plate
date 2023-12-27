@@ -6,6 +6,7 @@ export const chatApi = apiSlice
         endpoints: builder => ({
             getChatUsers: builder.query({
                 query: () => `${apiUrl.chatUsers}`,
+                providesTags: ['chatUsers'],
             }),
             getMessages: builder.query({
                 query: (chatId) => ({
@@ -45,6 +46,27 @@ export const chatApi = apiSlice
                     method: 'DELETE',
                 })
             }),
+            blockUser: builder.mutation({
+                query: (data) => ({
+                    url: `${apiUrl.blockChatUser}`,
+                    method: 'POST',
+                    body: data
+                }),
+            }),
+            unblockUser: builder.mutation({
+                query: (data) => ({
+                    url: `${apiUrl.unblockChatUser}`,
+                    method: 'POST',
+                    body: data
+                }),
+            }),
+            deleteChat: builder.mutation({
+                query: (id) => ({
+                    url: `${apiUrl.deleteChat}/${id}`,
+                    method: 'DELETE',
+                })
+            }),
+
         }),
     })
 
@@ -57,4 +79,7 @@ export const {
     useCreateGroupMutation,
     useSendMessageMutation,
     useDeleteMessageMutation,
+    useBlockUserMutation,
+    useUnblockUserMutation,
+    useDeleteChatMutation,
 } = chatApi

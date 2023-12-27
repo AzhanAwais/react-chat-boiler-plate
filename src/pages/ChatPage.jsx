@@ -8,7 +8,7 @@ import MessagesWrapper from '../components/chat/MessagesWrapper'
 import MessageInput from '../components/chat/MessageInput'
 import UploadedFiles from '../components/chat/UploadedFiles'
 import NoChatSelected from '../components/chat/NoChatSelected'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 
 const ChatPage = () => {
     const { selectedChat } = useSelector((state) => state?.chat)

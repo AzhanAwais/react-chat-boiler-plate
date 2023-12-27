@@ -1,6 +1,7 @@
 import moment from "moment"
 import { roles, constant } from "./constants"
 import Assets from "../constants/images"
+import { GetAuthUserLocalStorage } from "../services/localStorage/localStorage"
 
 export const createImagePreview = (file) => {
     return URL.createObjectURL(file)
@@ -40,4 +41,14 @@ export const getAudioAndVideoUrl = (url) => {
 export const getUnReadCount = (userId, unReadCount) => {
     const [userData] = unReadCount?.filter((item) => item?.user == userId)
     return userData?.count
+}
+
+export const getBlockStatus = (selectedChat) => {
+    let currUser = GetAuthUserLocalStorage()
+    let isBlocked = false
+    const [user] = selectedChat?.data?.blockedStatuses?.filter((item) => item?.user != currUser?._id)
+    if (user?.isBlocked) {
+        isBlocked = true
+    }
+    return isBlocked
 }

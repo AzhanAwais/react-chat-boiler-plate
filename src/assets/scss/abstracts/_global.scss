@@ -54,8 +54,10 @@ input:-webkit-autofill:active {
     -webkit-box-shadow: 0 0 0 30px $color-white inset !important;
 }
 
-.fade:not(.show){
-    opacity: 1;
+div{
+    .fade:not(.show){
+        opacity: 1;
+    }
 }
 
 // cursor

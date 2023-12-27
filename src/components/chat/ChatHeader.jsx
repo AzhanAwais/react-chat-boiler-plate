@@ -6,13 +6,14 @@ import UnblockUserPopup from '../popup/UnblockUserPopup';
 import BlockUserPopup from '../popup/BlockUserPopup';
 import DeleteChatPopup from '../popup/DeleteChatPopup';
 import { useSelector } from 'react-redux';
-import { getImageUrl } from '../../utils/helper';
+import { getBlockStatus, getImageUrl } from '../../utils/helper';
+import { GetAuthUserLocalStorage } from '../../services/localStorage/localStorage';
 
 const ChatHeader = () => {
     const { selectedChat } = useSelector((state) => state?.chat)
-    const [blockUserPopup, setBlockUserPopup] = useState("")
-    const [unblockUserPopup, setUnblockUserPopup] = useState("")
-    const [deleteChatPopup, setDeleteChatPopup] = useState("")
+    const [blockUserPopup, setBlockUserPopup] = useState(false)
+    const [unblockUserPopup, setUnblockUserPopup] = useState(false)
+    const [deleteChatPopup, setDeleteChatPopup] = useState(false)
 
     const getChatInfo = () => {
         let url = ""
@@ -60,13 +61,17 @@ const ChatHeader = () => {
                                 {
                                     !selectedChat?.data?.isGroupChat &&
                                     <>
-                                        <li className='cursor mb-1' onClick={() => setBlockUserPopup(true)}>
-                                            <span>Block User</span>
-                                        </li>
+                                        {
+                                            getBlockStatus(selectedChat) ?
+                                                <li className='cursor mb-1' onClick={() => setUnblockUserPopup(true)}>
+                                                    <span>Unblock User</span>
+                                                </li>
+                                                :
+                                                <li className='cursor mb-1' onClick={() => setBlockUserPopup(true)}>
+                                                    <span>Block User</span>
+                                                </li>
+                                        }
 
-                                        <li className='cursor mb-1' onClick={() => setUnblockUserPopup(true)}>
-                                            <span>Unblock User</span>
-                                        </li>
                                     </>
                                 }
                                 <li className='cursor' onClick={() => setDeleteChatPopup(true)}>

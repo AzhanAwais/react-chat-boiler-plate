@@ -1,10 +1,32 @@
 import React from 'react'
 import { Button, Modal } from "react-bootstrap"
 import { FaTimes } from 'react-icons/fa'
+import Loader from '../loader/Loader'
+import { errorMsg } from '../../constants/msg'
+import { useDispatch, useSelector } from 'react-redux'
+import { GetAuthUserLocalStorage } from '../../services/localStorage/localStorage'
+import { useDeleteChatMutation } from '../../store/apis/chatApi'
+import { setMessages, setSelectedChat } from '../../store/slices/chatSlice'
 
 const DeleteChatPopup = ({ deleteChatPopup, setDeleteChatPopup }) => {
-    const deleteChat = async () => {
+    const dispatch = useDispatch()
+    const currUser = GetAuthUserLocalStorage()
+    const [deleteChat, { isLoading }] = useDeleteChatMutation()
+    const { selectedChat } = useSelector((state) => state?.chat)
 
+    const handleDeleteChat = async () => {
+        const chatId = selectedChat?.data?._id
+        const { data, error } = await deleteChat(chatId)
+        if (data) {
+            let user = data?.data?.sender?._id == currUser?._id ? data?.data?.receiver : data?.data?.sender
+            dispatch(setSelectedChat({ data: data?.data, user: user }))
+            dispatch(setMessages({ data: [], isLoading: false }))
+            setDeleteChatPopup(false)
+            successMsg(data.message)
+        }
+        else {
+            errorMsg(error.data.message)
+        }
     }
 
     return (
@@ -24,8 +46,14 @@ const DeleteChatPopup = ({ deleteChatPopup, setDeleteChatPopup }) => {
                 <div>
                     <p>Are you sure you want to delete this chat</p>
                     <div className="mt-4 d-flex align-items-center">
-                        <Button className='btn-solid btn-danger' onClick={deleteChat}>Yes</Button>
-                        <Button  className='btn-solid ms-2' onClick={() => setDeleteChatPopup(false)}>No</Button>
+                        <Button
+                            disabled={isLoading}
+                            className='btn-solid btn-danger'
+                            onClick={handleDeleteChat}
+                        >
+                            {isLoading ? <Loader /> : 'Yes'}
+                        </Button>
+                        <Button className='btn-solid ms-2' onClick={() => setDeleteChatPopup(false)}>No</Button>
                     </div>
                 </div>
             </Modal.Body>
