@@ -38,7 +38,7 @@ const ChatHeader = () => {
                         <div className="img-wrapper">
                             <img src={getChatInfo()?.url} alt="" onError={(e) => e.target.src = Assets.ProfilePlaceholder} />
                             {
-                                selectedChat?.data?.isGroupChat &&
+                                !selectedChat?.data?.isGroupChat &&
                                 <div className={`status ${selectedChat?.user?.isOnline ? 'online' : 'offline'}`}></div>
                             }
                         </div>

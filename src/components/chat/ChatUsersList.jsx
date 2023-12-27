@@ -66,7 +66,7 @@ const ChatUsersList = ({ searchText }) => {
                                         <div className="img-wrapper">
                                             <img src={getChatListInfo(item)?.url} alt="" onError={(e) => e.target.src = Assets.ProfilePlaceholder} />
                                             {
-                                                item?.isGroupChat &&
+                                                !item?.isGroupChat &&
                                                 <div className={`status ${user?.isOnline ? 'online' : 'offline'}`}></div>
                                             }
                                         </div>

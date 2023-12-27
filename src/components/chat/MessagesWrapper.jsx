@@ -38,7 +38,7 @@ const MessagesWrapper = ({ files }) => {
                             key={index}
                             className={`${item?.sender == currUser?._id ? 'my-message' : 'other-message'} mb-3`}
                         >
-                            <MessageBox data={item} />
+                            <MessageBox data={item} index={index} />
                         </div>
                     ))
             }

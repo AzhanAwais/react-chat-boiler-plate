@@ -39,6 +39,12 @@ export const chatApi = apiSlice
                     body: data
                 })
             }),
+            deleteMessage: builder.mutation({
+                query: (id) => ({
+                    url: `${apiUrl.deleteMessage}/${id}`,
+                    method: 'DELETE',
+                })
+            }),
         }),
     })
 
@@ -50,4 +56,5 @@ export const {
     useStartChatMutation,
     useCreateGroupMutation,
     useSendMessageMutation,
+    useDeleteMessageMutation,
 } = chatApi

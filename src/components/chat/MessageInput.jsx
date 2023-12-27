@@ -11,6 +11,7 @@ import { setMessages } from '../../store/slices/chatSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { useUploadFileMutation } from '../../store/apis/uploadFileApi';
 import { Button } from 'react-bootstrap';
+import { errorMsg } from '../../constants/msg'
 
 const MessageInput = ({ message, setMessage, files, setFiles }) => {
     const [show, setShow] = useState(false)
@@ -19,7 +20,7 @@ const MessageInput = ({ message, setMessage, files, setFiles }) => {
     const currUser = GetAuthUserLocalStorage()
     const [sendMessage, { isLoading }] = useSendMessageMutation()
     const [uploadFile] = useUploadFileMutation()
-    const { selectedChat } = useSelector((state) => state?.chat)
+    const { selectedChat, messages } = useSelector((state) => state?.chat)
 
     const handleFileChange = (e) => {
         setFiles([...files, ...e.target.files])
@@ -27,29 +28,47 @@ const MessageInput = ({ message, setMessage, files, setFiles }) => {
     }
 
     const uploadFiles = async (formData) => {
-        let formdata = new FormData()
+        let images = []
+        let videos = []
+        let docs = []
+        let audio = null
 
         for (let i = 0; i < files?.length; i++) {
+            let formdata = new FormData()
             formdata.append("file", files[i])
+            
             const { data, error } = await uploadFile(formdata)
             if (data) {
                 if (messageType == messageTypes.image) {
-                    formdata.images = [...formdata.images, data?.data]
+                    images?.push(data?.data)
                 }
                 else if (messageType == messageTypes.video) {
-                    formdata.videos = [...formdata.videos, data?.data]
+                    videos?.push(data?.data)
                 }
                 else if (messageType == messageTypes.doc) {
-                    formdata.docs = [...formdata.videos, {
+                    videos?.push({
                         name: files[i]?.name,
                         url: data?.data
-                    }]
+                    })
                 }
                 else if (messageType == messageTypes.audio) {
-                    formdata.audio = data?.data
-                    delete formData?.message
+                    audio = data?.data
                 }
             }
+        }
+
+        if (messageType == messageTypes.image) {
+            formData.images = images
+        }
+        else if (messageType == messageTypes.video) {
+            formData.videos = videos
+        }
+        else if (messageType == messageTypes.doc) {
+            formData.docs = docs
+        }
+        else if (messageType == messageTypes.audio) {
+            formData.audio = audio
+            delete formData?.message
         }
 
         return formData
@@ -80,7 +99,9 @@ const MessageInput = ({ message, setMessage, files, setFiles }) => {
 
         const { data, error } = await sendMessage(formData)
         if (data) {
-            dispatch(setMessages(data?.data))
+            let temp = [...messages?.data]
+            temp?.push(data?.data)
+            dispatch(setMessages({ data: temp, isLoading: false }))
             resetForm()
         }
         else {
@@ -106,7 +127,7 @@ const MessageInput = ({ message, setMessage, files, setFiles }) => {
                 </div>
 
                 <div className="d-flex align-items-center">
-                    <Button disabled={isLoading} className="ms-3" onClick={handleSendMessage}>
+                    <Button disabled={isLoading} className="mx-3" onClick={handleSendMessage}>
                         {isLoading ? <Loader /> : <IoMdSend className='icon' />}
                     </Button>
 

@@ -71,7 +71,7 @@
 
     ul {
         li {
-            padding: 18px 24px;
+            padding: 18px 18px;
             border-radius: 5px;
 
             &.active {
@@ -91,10 +91,16 @@
 
             .name {
                 color: $color-black;
+                width: 80px;
+                margin-right: 10px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
 
             .time {
                 color: $color-grey;
+                font-size: 10px;
             }
 
             .message {
@@ -314,12 +320,62 @@
                 border-radius: 5px;
             }
         }
+
+        .many-image-wrapper {
+            max-width: 300px;
+            width: 300px;
+            height: 312px;
+
+            .col-6 {
+                padding-left: 5px !important;
+                padding-right: 5px !important;
+            }
+
+            .img-wrapper {
+                width: 100%;
+                height: 140px;
+                position: relative;
+                overflow: hidden;
+
+                img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                    object-position: center;
+                }
+
+                .overlay {
+                    position: absolute;
+                    width: 100%;
+                    height: 100%;
+                    background-color: $color-black;
+                    opacity: 0.75;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: $color-white;
+                    font-size: 20px;
+                    font-weight: 700;
+                }
+            }
+        }
     }
 }
 
 .message-input {
     padding: 16px;
     border-top: 1px solid $color-border;
+
+    .btn {
+        padding: 0;
+        background-color: transparent;
+        border: none;
+        &:hover,
+        &:focus {
+            box-shadow: none;
+            border: none;
+        }
+    }
 
     .icon-wrapper {
         width: 40px;
@@ -448,5 +504,61 @@
         &.orange {
             background-color: $color-orange;
         }
+    }
+}
+
+.message-actions {
+    position: relative;
+    display: flex;
+
+
+    .dropdown {
+        margin-left: 10px;
+        position: relative;
+        top: 11px;
+
+        .btn {
+            padding: 0;
+            background-color: transparent;
+            border: none;
+            color: $color-black;
+
+            &:hover,
+            &:focus {
+                border: none;
+                background-color: transparent;
+                box-shadow: none;
+            }
+        }
+    }
+
+    .dropdown-toggle {
+        background-color: transparent;
+        border: none;
+
+        &:hover,
+        &:focus {
+            border: none;
+            background-color: transparent;
+            box-shadow: none;
+        }
+
+        &::after {
+            display: none;
+        }
+    }
+
+    .dropdown-menu {
+        border: none;
+        padding: 10px;
+        box-shadow:
+            rgba(145, 158, 171, 0.3) 0px 0px 2px 0px,
+            rgba(145, 158, 171, 0.12) 0px 12px 24px -4px;
+    }
+}
+
+#viewerBackdrop {
+    figure {
+        background-color: $color-white;
     }
 }
