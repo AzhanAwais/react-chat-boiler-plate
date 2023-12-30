@@ -72,7 +72,7 @@ export const chatApi = apiSlice
 
 
 export const {
-    useGetChatUsersQuery,
+    useLazyGetChatUsersQuery,
     useLazyGetMessagesQuery,
     useLazySearchUsersQuery,
     useStartChatMutation,

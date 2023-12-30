@@ -1,24 +1,22 @@
 import React, { useEffect } from 'react'
 import Assets from '../../constants/images'
-import { useGetChatUsersQuery } from '../../store/apis/chatApi'
 import Loader from '../loader/Loader'
 import { GetAuthUserLocalStorage } from '../../services/localStorage/localStorage'
 import { getChatTime, getImageUrl, getUnReadCount } from '../../utils/helper'
 import { useDispatch, useSelector } from 'react-redux'
-import { setSelectedChat } from '../../store/slices/chatSlice'
+import { setChatsUserList, setSelectedChat } from '../../store/slices/chatSlice'
 
-const ChatUsersList = ({ searchText }) => {
+const ChatUsersList = ({ searchText, isLoading }) => {
     const currUser = GetAuthUserLocalStorage()
     const dispatch = useDispatch()
-    const { selectedChat } = useSelector((state) => state?.chat)
-    const { isLoading, data } = useGetChatUsersQuery()
+    const { selectedChat, chatsUserList } = useSelector((state) => state?.chat)
 
     const filteredData = () => {
         if (searchText) {
-            return data?.data?.filter((item) => item?.receiver?.fullname?.toLowerCase()?.includes(searchText?.toLowerCase()) || item?.sender?.fullname?.toLowerCase()?.includes(searchText?.toLowerCase()))
+            return chatsUserList?.data?.filter((item) => item?.receiver?.fullname?.toLowerCase()?.includes(searchText?.toLowerCase()) || item?.sender?.fullname?.toLowerCase()?.includes(searchText?.toLowerCase()))
         }
         else {
-            return data?.data
+            return chatsUserList?.data
         }
     }
 
@@ -48,7 +46,6 @@ const ChatUsersList = ({ searchText }) => {
                         <Loader /> :
                         filteredData()?.map((item, index) => {
                             let user = item?.sender?._id == currUser?._id ? item?.receiver : item?.sender
-
                             return (
                                 <li
                                     className={selectedChat?.data?._id == item?._id ? "active" : ""}

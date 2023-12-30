@@ -57,7 +57,7 @@ const StartChatPopup = ({ startChatPopup, setStartChatPopup }) => {
             }
             const { data, error } = await allSearchUsers(params)
             if (data) {
-                dispatch(setSearchUsers({ data: data?.data?.data, isLoading: isLoading }))
+                dispatch(setSearchUsers({ data: data?.data?.data, pagination: null }))
             }
             else {
                 errorMsg(error.data.message)

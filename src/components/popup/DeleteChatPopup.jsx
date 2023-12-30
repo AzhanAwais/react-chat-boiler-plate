@@ -20,7 +20,7 @@ const DeleteChatPopup = ({ deleteChatPopup, setDeleteChatPopup }) => {
         if (data) {
             let user = data?.data?.sender?._id == currUser?._id ? data?.data?.receiver : data?.data?.sender
             dispatch(setSelectedChat({ data: data?.data, user: user }))
-            dispatch(setMessages({ data: [], isLoading: false }))
+            dispatch(setMessages({ data: [], pagination: null }))
             setDeleteChatPopup(false)
             successMsg(data.message)
         }

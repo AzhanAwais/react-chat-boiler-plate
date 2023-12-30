@@ -25,6 +25,7 @@ export const roles = {
 export const apiUrl = {
     uploadFile: '/api/file/upload-file',
     login: '/api/auth/login',
+    logout: '/api/auth/logout',
     chatUsers: '/api/chat/get-chat-users',
     messages: '/api/chat/get-messages',
     searchUsers: '/api/chat/search-users',

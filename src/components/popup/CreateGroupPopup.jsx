@@ -19,6 +19,7 @@ import CustomInput from '../form/CustomInput';
 import Loader from '../loader/Loader';
 import { createImagePreview } from '../../utils/helper';
 import { useUploadFileMutation } from '../../store/apis/uploadFileApi';
+import { getChatSocket } from '../../socket';
 
 const CreateGroupPopup = ({ createGroupPopup, setCreateGroupPopup }) => {
     const { handleSubmit, register, control, reset, watch, setValue, getValues, formState: { errors } } = useForm({ mode: 'onChange' })
@@ -50,6 +51,8 @@ const CreateGroupPopup = ({ createGroupPopup, setCreateGroupPopup }) => {
         }
         const { data, error } = await createGroup(formData)
         if (data) {
+            const socket = getChatSocket()
+            socket.emit("groupCreated", { group: data?.data })
             dispatch(setSelectedChat({ data: data?.data, user: null }))
             successMsg(data.message)
             setCreateGroupPopup(false)
@@ -73,7 +76,7 @@ const CreateGroupPopup = ({ createGroupPopup, setCreateGroupPopup }) => {
             }
             const { data, error } = await allSearchUsers(params)
             if (data) {
-                dispatch(setSearchUsers({ data: data?.data?.data, isLoading: isLoading }))
+                dispatch(setSearchUsers({ data: data?.data?.data, pagination: null }))
             }
             else {
                 errorMsg(error.data.message)

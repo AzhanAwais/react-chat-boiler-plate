@@ -34,13 +34,13 @@ const MessageBox = ({ data, index }) => {
         if (resData) {
             let temp = [...messages]
             temp[index].isDeleted = true
-            dispatch(setMessages({ data: temp, isLoading: false }))
+            dispatch(setMessages({ data: temp, pagination: null }))
         }
         else {
             errorMsg(error.data.message)
         }
     }
-    
+
     return (
         <>
             {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Col, Container, Row } from 'react-bootstrap'
 import MyProfile from '../components/chat/MyProfile'
 import Search from '../components/chat/Search'
@@ -8,13 +8,54 @@ import MessagesWrapper from '../components/chat/MessagesWrapper'
 import MessageInput from '../components/chat/MessageInput'
 import UploadedFiles from '../components/chat/UploadedFiles'
 import NoChatSelected from '../components/chat/NoChatSelected'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { getOfflineUser, getOnlineUser, groupCreated } from '../services/chat/chat'
+import { useLazyGetChatUsersQuery } from '../store/apis/chatApi'
+import { errorMsg } from '../constants/msg'
+import { setChatsUserList } from '../store/slices/chatSlice'
+import { getChatSocket } from '../socket'
+const socket = getChatSocket()
 
 const ChatPage = () => {
-    const { selectedChat } = useSelector((state) => state?.chat)
+    const dispatch = useDispatch()
+    const { selectedChat, chatsUserList } = useSelector((state) => state?.chat)
+    const [getChatUsers, { isLoading }] = useLazyGetChatUsersQuery()
     const [message, setMessage] = useState("")
     const [searchText, setSearchText] = useState("")
     const [files, setFiles] = useState([])
+
+    useEffect(() => {
+
+        const getAllChatUsers = async () => {
+            const { data, error } = await getChatUsers()
+            if (data) {
+                dispatch(setChatsUserList({ data: data?.data, pagination: null }))
+                socket.on("getOnlineUser", (userData) => {
+                    getOnlineUser(dispatch, data, userData)
+                })
+            }
+            else {
+                errorMsg(error.data.message)
+            }
+        }
+
+        getAllChatUsers()
+    }, [])
+
+    useEffect(() => {
+        socket.on("getOnlineUser", (userData) => {
+            getOnlineUser(dispatch, chatsUserList, userData)
+        })
+
+        socket.on("getOfflineUser", (userData) => {
+            getOfflineUser(dispatch, chatsUserList, userData)
+        })
+
+        socket.on("groupCreated", (data) => {
+            groupCreated(dispatch, chatsUserList, data)
+        })
+
+    })
 
     return (
         <div className='pages chat-page'>
@@ -24,7 +65,7 @@ const ChatPage = () => {
                         <div className="left-panel">
                             <MyProfile />
                             <Search searchText={searchText} setSearchText={setSearchText} />
-                            <ChatUsersList searchText={searchText} />
+                            <ChatUsersList searchText={searchText} isLoading={isLoading} />
                         </div>
                     </Col>
 

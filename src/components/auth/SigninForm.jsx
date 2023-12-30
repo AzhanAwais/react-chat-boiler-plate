@@ -9,16 +9,19 @@ import Loader from '../loader/Loader'
 import { errorMsg, successMsg } from '../../constants/msg'
 import { SetAuthUserLocalStorage, SetTokenLocalStorage } from '../../services/localStorage/localStorage'
 import { useNavigate } from 'react-router-dom'
+import { getChatSocket } from '../../socket'
 
 const SigninForm = () => {
     const { handleSubmit, register, control, reset, watch, setValue, getValues, formState: { errors } } = useForm({ mode: 'onChange' })
     const navigate = useNavigate()
     const [showPassword, setShowPassword] = useState(false)
     const [login, { isLoading }] = useLoginMutation()
-    
+
     const onSubmit = async (formData) => {
         const { data, error } = await login(formData)
         if (data) {
+            const socket = getChatSocket()
+            socket.emit("getOnlineUser")
             SetTokenLocalStorage(data.data.token)
             SetAuthUserLocalStorage(data.data.user)
             navigate("/chat")

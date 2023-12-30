@@ -26,15 +26,14 @@ export const chatSlice = createSlice({
     },
     reducers: {
         setChatsUserList: (state, action) => {
-            state.chatsUserList.isLoading = action?.payload?.isLoading
             state.chatsUserList.data = action?.payload?.data
+            state.chatsUserList.pagination = action?.payload?.pagination
         },
         setMessages: (state, action) => {
-            state.messages.isLoading = action?.payload?.isLoading
             state.messages.data = action?.payload?.data
+            state.messages.pagination = action?.payload?.pagination
         },
         setSearchUsers: (state, action) => {
-            state.searchUsers.isLoading = action?.payload?.isLoading
             state.searchUsers.data = action?.payload?.data
             state.searchUsers.pagination = action?.payload?.pagination
         },

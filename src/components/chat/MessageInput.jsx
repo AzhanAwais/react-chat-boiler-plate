@@ -102,7 +102,7 @@ const MessageInput = ({ message, setMessage, files, setFiles }) => {
         if (data) {
             let temp = [...messages?.data]
             temp?.push(data?.data)
-            dispatch(setMessages({ data: temp, isLoading: false }))
+            dispatch(setMessages({ data: temp , pagination: null}))
             resetForm()
         }
         else {

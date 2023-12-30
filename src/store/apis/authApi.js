@@ -11,10 +11,17 @@ export const auhtApi = apiSlice
                     body: data
                 })
             }),
+            logout: builder.query({
+                query: () => ({
+                    url: `${apiUrl.logout}`,
+                    method: 'GET',
+                })
+            }),
         })
     })
 
 
 export const {
-    useLoginMutation
+    useLoginMutation,
+    useLazyLogoutQuery,
 } = auhtApi

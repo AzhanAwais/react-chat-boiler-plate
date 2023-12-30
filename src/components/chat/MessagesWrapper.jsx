@@ -17,7 +17,7 @@ const MessagesWrapper = ({ files }) => {
         const getAllMessages = async () => {
             const { data, error } = await getMessages(selectedChat?.data?._id)
             if (data) {
-                dispatch(setMessages({ data: data?.data, isLoading: false }))
+                dispatch(setMessages({ data: data?.data, pagination: null }))
             }
             else {
                 errorMsg(error?.message)
