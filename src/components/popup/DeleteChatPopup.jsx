@@ -6,7 +6,7 @@ import { errorMsg } from '../../constants/msg'
 import { useDispatch, useSelector } from 'react-redux'
 import { GetAuthUserLocalStorage } from '../../services/localStorage/localStorage'
 import { useDeleteChatMutation } from '../../store/apis/chatApi'
-import { setMessages, setSelectedChat } from '../../store/slices/chatSlice'
+import { setMessages } from '../../store/slices/chatSlice'
 
 const DeleteChatPopup = ({ deleteChatPopup, setDeleteChatPopup }) => {
     const dispatch = useDispatch()
@@ -18,8 +18,6 @@ const DeleteChatPopup = ({ deleteChatPopup, setDeleteChatPopup }) => {
         const chatId = selectedChat?.data?._id
         const { data, error } = await deleteChat(chatId)
         if (data) {
-            let user = data?.data?.sender?._id == currUser?._id ? data?.data?.receiver : data?.data?.sender
-            dispatch(setSelectedChat({ data: data?.data, user: user }))
             dispatch(setMessages({ data: [], pagination: null }))
             setDeleteChatPopup(false)
             successMsg(data.message)

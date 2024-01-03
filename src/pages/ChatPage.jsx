@@ -9,23 +9,23 @@ import MessageInput from '../components/chat/MessageInput'
 import UploadedFiles from '../components/chat/UploadedFiles'
 import NoChatSelected from '../components/chat/NoChatSelected'
 import { useDispatch, useSelector } from 'react-redux'
-import { getOfflineUser, getOnlineUser, groupCreated } from '../services/chat/chat'
+import { getOfflineUser, getOnlineUser, groupCreated, onMessage } from '../services/chat/chat'
 import { useLazyGetChatUsersQuery } from '../store/apis/chatApi'
 import { errorMsg } from '../constants/msg'
 import { setChatsUserList } from '../store/slices/chatSlice'
 import { getChatSocket } from '../socket'
+
 const socket = getChatSocket()
 
 const ChatPage = () => {
     const dispatch = useDispatch()
-    const { selectedChat, chatsUserList } = useSelector((state) => state?.chat)
+    const { selectedChat, chatsUserList, messages } = useSelector((state) => state?.chat)
     const [getChatUsers, { isLoading }] = useLazyGetChatUsersQuery()
     const [message, setMessage] = useState("")
     const [searchText, setSearchText] = useState("")
     const [files, setFiles] = useState([])
 
     useEffect(() => {
-
         const getAllChatUsers = async () => {
             const { data, error } = await getChatUsers()
             if (data) {
@@ -55,6 +55,9 @@ const ChatPage = () => {
             groupCreated(dispatch, chatsUserList, data)
         })
 
+        socket.on("message", (data) => {
+           onMessage(dispatch, messages, data)
+        })
     })
 
     return (

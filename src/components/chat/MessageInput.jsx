@@ -13,6 +13,9 @@ import { useUploadFileMutation } from '../../store/apis/uploadFileApi';
 import { Button } from 'react-bootstrap';
 import { errorMsg } from '../../constants/msg'
 import { getBlockStatus } from '../../utils/helper';
+import { getChatSocket } from '../../socket';
+
+const socket = getChatSocket()
 
 const MessageInput = ({ message, setMessage, files, setFiles }) => {
     const [show, setShow] = useState(false)
@@ -21,7 +24,7 @@ const MessageInput = ({ message, setMessage, files, setFiles }) => {
     const currUser = GetAuthUserLocalStorage()
     const [sendMessage, { isLoading }] = useSendMessageMutation()
     const [uploadFile] = useUploadFileMutation()
-    const { selectedChat, messages } = useSelector((state) => state?.chat)
+    const { selectedChat, messages} = useSelector((state) => state?.chat)
 
     const handleFileChange = (e) => {
         setFiles([...files, ...e.target.files])
@@ -100,9 +103,10 @@ const MessageInput = ({ message, setMessage, files, setFiles }) => {
 
         const { data, error } = await sendMessage(formData)
         if (data) {
-            let temp = [...messages?.data]
-            temp?.push(data?.data)
-            dispatch(setMessages({ data: temp , pagination: null}))
+            socket.emit("message", {
+                chatId: selectedChat?.data?._id,
+                messageData: data?.data
+            })
             resetForm()
         }
         else {

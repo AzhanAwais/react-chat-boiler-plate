@@ -6,7 +6,10 @@ import { errorMsg } from '../../constants/msg'
 import { EmptyLocalStorage, GetAuthUserLocalStorage } from '../../services/localStorage/localStorage'
 import { useNavigate } from 'react-router-dom'
 import { FaTimes } from 'react-icons/fa'
+import { useSelector } from 'react-redux'
 import { getChatSocket } from '../../socket'
+
+const socket = getChatSocket()
 
 const LogoutPopup = ({ logoutPopup, setLogoutPopup }) => {
     const navigate = useNavigate()
@@ -14,7 +17,6 @@ const LogoutPopup = ({ logoutPopup, setLogoutPopup }) => {
     const [logout, { isLoading }] = useLazyLogoutQuery()
 
     const handleLogout = async () => {
-        const socket = getChatSocket()
         const { data, error } = await logout()
         if (data) {
             socket.emit('getOfflineUser')

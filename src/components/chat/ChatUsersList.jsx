@@ -76,7 +76,16 @@ const ChatUsersList = ({ searchText, isLoading }) => {
 
                                             <div className="mt-1 d-flex align-items-center justify-content-between">
                                                 <span className='message'>{item?.lastMessage}</span>
-                                                <span className='counter '>{getUnReadCount(currUser?._id, item?.unReadCount)}</span>
+                                                {
+                                                    !item?.isGroupChat &&
+                                                    <span className='counter '>
+                                                        {
+                                                            selectedChat?.user?._id == user?._id ? 0
+                                                                :
+                                                                getUnReadCount(currUser?._id, item?.unReadCount)
+                                                        }
+                                                    </span>
+                                                }
                                             </div>
                                         </div>
                                     </div>
