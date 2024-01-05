@@ -19,11 +19,8 @@ import CustomInput from '../form/CustomInput';
 import Loader from '../loader/Loader';
 import { createImagePreview } from '../../utils/helper';
 import { useUploadFileMutation } from '../../store/apis/uploadFileApi';
-import { getChatSocket } from '../../socket';
 
-const socket = getChatSocket()
-
-const CreateGroupPopup = ({ createGroupPopup, setCreateGroupPopup }) => {
+const CreateGroupPopup = ({ createGroupPopup, setCreateGroupPopup , socket}) => {
     const { handleSubmit, register, control, reset, watch, setValue, getValues, formState: { errors } } = useForm({ mode: 'onChange' })
     const dispatch = useDispatch()
     const [groupImage] = watch(['groupImage'])

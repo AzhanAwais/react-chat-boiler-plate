@@ -4,10 +4,16 @@ import ErrorPage from '../pages/ErrorPage'
 import ChatPage from '../pages/ChatPage'
 import SigninForm from '../components/auth/SigninForm'
 import AuthLayout from '../layouts/auth/AuthLayout'
+import { io } from 'socket.io-client'
+import { constant } from '../utils/constants'
+import { GetAuthUserLocalStorage } from '../services/localStorage/localStorage'
+
+const chatSocket = io(`${constant.BASE_URL}/chat`, { auth: GetAuthUserLocalStorage() })
 
 const Navigation = () => {
     const navigate = useNavigate()
     const location = useLocation()
+    const currUser = GetAuthUserLocalStorage()
 
     useEffect(() => {
         // move to top on page change
@@ -26,7 +32,7 @@ const Navigation = () => {
 
             {/* ************* Chat Routes ************* */}
 
-            <Route path='/chat' element={<ChatPage />} ></Route>
+            <Route path='/chat' element={<ChatPage socket={chatSocket} />} ></Route>
 
 
             {/* ******* NOTE: PLACE ALL ROUTES BEFORE ERROR ROUTE ******* */}

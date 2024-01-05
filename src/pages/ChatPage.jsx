@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { Col, Container, Row } from 'react-bootstrap'
 import MyProfile from '../components/chat/MyProfile'
 import Search from '../components/chat/Search'
@@ -13,11 +13,12 @@ import { getOfflineUser, getOnlineUser, groupCreated, onMessage } from '../servi
 import { useLazyGetChatUsersQuery } from '../store/apis/chatApi'
 import { errorMsg } from '../constants/msg'
 import { setChatsUserList } from '../store/slices/chatSlice'
-import { getChatSocket } from '../socket'
+import { io } from "socket.io-client"
+import { constant } from "../utils/constants"
+import { GetAuthUserLocalStorage } from '../services/localStorage/localStorage'
 
-const socket = getChatSocket()
-
-const ChatPage = () => {
+const ChatPage = ({ socket }) => {
+    const currUser = GetAuthUserLocalStorage()
     const dispatch = useDispatch()
     const { selectedChat, chatsUserList, messages } = useSelector((state) => state?.chat)
     const [getChatUsers, { isLoading }] = useLazyGetChatUsersQuery()
@@ -26,8 +27,9 @@ const ChatPage = () => {
     const [files, setFiles] = useState([])
 
     useEffect(() => {
+        socket.emit("joinRoom", currUser)
         const getAllChatUsers = async () => {
-            const { data, error } = await getChatUsers()
+            const { data, error } = await getChatUsers(currUser)
             if (data) {
                 dispatch(setChatsUserList({ data: data?.data, pagination: null }))
                 socket.on("getOnlineUser", (userData) => {
@@ -56,9 +58,16 @@ const ChatPage = () => {
         })
 
         socket.on("message", (data) => {
-           onMessage(dispatch, messages, data)
+            onMessage(dispatch, messages, data)
         })
-    })
+
+        return () => {
+            socket.off("getOnlineUser")
+            socket.off("getOfflineUser")
+            socket.off("groupCreated")
+            socket.off("message")
+        }
+    }, [dispatch, messages])
 
     return (
         <div className='pages chat-page'>
@@ -66,7 +75,7 @@ const ChatPage = () => {
                 <Row>
                     <Col xs={12} md={5} lg={4} xl={3} className='pe-0'>
                         <div className="left-panel">
-                            <MyProfile />
+                            <MyProfile socket={socket} />
                             <Search searchText={searchText} setSearchText={setSearchText} />
                             <ChatUsersList searchText={searchText} isLoading={isLoading} />
                         </div>
@@ -85,6 +94,7 @@ const ChatPage = () => {
                                             setMessage={setMessage}
                                             files={files}
                                             setFiles={setFiles}
+                                            socket={socket}
                                         />
                                     </>
                                     :

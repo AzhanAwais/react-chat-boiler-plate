@@ -13,7 +13,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useDebounce } from 'use-debounce';
 import Loader from '../loader/Loader';
 import { errorMsg, successMsg } from '../../constants/msg';
-import { setSearchUsers, setSelectedChat } from '../../store/slices/chatSlice';
+import { setChatsUserList, setSearchUsers, setSelectedChat } from '../../store/slices/chatSlice';
 import { GetAuthUserLocalStorage } from '../../services/localStorage/localStorage';
 
 const StartChatPopup = ({ startChatPopup, setStartChatPopup }) => {
@@ -25,6 +25,7 @@ const StartChatPopup = ({ startChatPopup, setStartChatPopup }) => {
     const [search] = useDebounce(searchText, 800)
     const [allSearchUsers, { isLoading }] = useLazySearchUsersQuery()
     const [startChat, { isLoading: isStartChatLoading }] = useStartChatMutation()
+    const { chatsUserList } = useSelector((state) => state?.chat)
 
     const onSubmit = async (formData) => {
         const apiData = {
@@ -35,6 +36,7 @@ const StartChatPopup = ({ startChatPopup, setStartChatPopup }) => {
         if (data) {
             let user = data?.data?.sender?._id == currUser?._id ? data?.data?.receiver : data?.data?.sender
             dispatch(setSelectedChat({ data: data?.data, user: user }))
+            dispatch(setChatsUserList({ data: [...chatsUserList?.data, data?.data], pagination: null }))
             successMsg(data.message)
             setStartChatPopup(false)
             reset()

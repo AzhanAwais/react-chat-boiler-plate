@@ -6,12 +6,8 @@ import { errorMsg } from '../../constants/msg'
 import { EmptyLocalStorage, GetAuthUserLocalStorage } from '../../services/localStorage/localStorage'
 import { useNavigate } from 'react-router-dom'
 import { FaTimes } from 'react-icons/fa'
-import { useSelector } from 'react-redux'
-import { getChatSocket } from '../../socket'
 
-const socket = getChatSocket()
-
-const LogoutPopup = ({ logoutPopup, setLogoutPopup }) => {
+const LogoutPopup = ({ logoutPopup, setLogoutPopup , socket}) => {
     const navigate = useNavigate()
     const currUser = GetAuthUserLocalStorage()
     const [logout, { isLoading }] = useLazyLogoutQuery()

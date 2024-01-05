@@ -13,21 +13,19 @@ import { useUploadFileMutation } from '../../store/apis/uploadFileApi';
 import { Button } from 'react-bootstrap';
 import { errorMsg } from '../../constants/msg'
 import { getBlockStatus } from '../../utils/helper';
-import { getChatSocket } from '../../socket';
 
-const socket = getChatSocket()
-
-const MessageInput = ({ message, setMessage, files, setFiles }) => {
+const MessageInput = ({ message, setMessage, files, setFiles, socket }) => {
     const [show, setShow] = useState(false)
     const [messageType, setMessageType] = useState(messageTypes.text)
     const dispatch = useDispatch()
     const currUser = GetAuthUserLocalStorage()
     const [sendMessage, { isLoading }] = useSendMessageMutation()
     const [uploadFile] = useUploadFileMutation()
-    const { selectedChat, messages} = useSelector((state) => state?.chat)
+    const { selectedChat, messages } = useSelector((state) => state?.chat)
 
-    const handleFileChange = (e) => {
+    const handleFileChange = (e, messageType) => {
         setFiles([...files, ...e.target.files])
+        setMessageType(messageType)
         setShow(false)
     }
 
@@ -60,6 +58,8 @@ const MessageInput = ({ message, setMessage, files, setFiles }) => {
                 }
             }
         }
+
+        console.log(messageType)
 
         if (messageType == messageTypes.image) {
             formData.images = images
@@ -103,6 +103,7 @@ const MessageInput = ({ message, setMessage, files, setFiles }) => {
 
         const { data, error } = await sendMessage(formData)
         if (data) {
+            dispatch(setMessages({ data: [...messages?.data, data?.data], pagination: null }))
             socket.emit("message", {
                 chatId: selectedChat?.data?._id,
                 messageData: data?.data
@@ -144,7 +145,6 @@ const MessageInput = ({ message, setMessage, files, setFiles }) => {
                                 <div onClick={() => setShow(!show)}>
                                     <FileIconBox
                                         handleFileChange={handleFileChange}
-                                        setMessageType={setMessageType}
                                         show={show}
                                     />
                                 </div>

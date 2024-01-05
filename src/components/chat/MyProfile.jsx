@@ -8,7 +8,7 @@ import { GetAuthUserLocalStorage } from '../../services/localStorage/localStorag
 import { getImageUrl, getUserRole } from '../../utils/helper'
 import LogoutPopup from '../popup/LogoutPopup'
 
-const MyProfile = () => {
+const MyProfile = ({socket}) => {
     const currUser = GetAuthUserLocalStorage()
     const [startChatPopup, setStartChatPopup] = useState(false)
     const [createGroupPopup, setCreateGroupPopup] = useState(false)
@@ -46,8 +46,8 @@ const MyProfile = () => {
             </div>
 
             <StartChatPopup startChatPopup={startChatPopup} setStartChatPopup={setStartChatPopup} />
-            <CreateGroupPopup createGroupPopup={createGroupPopup} setCreateGroupPopup={setCreateGroupPopup} />
-            <LogoutPopup logoutPopup={logoutPopup} setLogoutPopup={setLogoutPopup} />
+            <CreateGroupPopup createGroupPopup={createGroupPopup} setCreateGroupPopup={setCreateGroupPopup} socket={socket} />
+            <LogoutPopup logoutPopup={logoutPopup} setLogoutPopup={setLogoutPopup}  socket={socket}/>
         </>
     )
 }

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import MessageBox from './MessageBox'
 import { useLazyGetMessagesQuery } from '../../store/apis/chatApi'
 import Loader from '../loader/Loader'
@@ -12,6 +12,7 @@ const MessagesWrapper = ({ files }) => {
     const currUser = GetAuthUserLocalStorage()
     const { selectedChat, messages } = useSelector((state) => state?.chat)
     const [getMessages, { isLoading }] = useLazyGetMessagesQuery()
+    const messageRef = useRef(null)
 
     useEffect(() => {
         const getAllMessages = async () => {
@@ -27,8 +28,18 @@ const MessagesWrapper = ({ files }) => {
         getAllMessages()
     }, [selectedChat])
 
+    useEffect(() => {
+        const scrollToBottom = () => {
+            if (messageRef.current) {
+                messageRef.current.scrollTop = messageRef.current.scrollHeight
+            }
+        }
+
+        scrollToBottom()
+    }, [messages])
+
     return (
-        <div className={`messages-wrapper ${files?.length > 0 ? "is-file" : ""}`}>
+        <div ref={messageRef} className={`messages-wrapper ${files?.length > 0 ? "is-file" : ""}`}>
             {
                 isLoading ?
                     <Loader />
@@ -36,7 +47,7 @@ const MessagesWrapper = ({ files }) => {
                     messages?.data?.map((item, index) => (
                         <div
                             key={index}
-                            className={`${item?.sender == currUser?._id ? 'my-message' : 'other-message'} mb-3`}
+                            className={`${item?.sender?._id == currUser?._id ? 'my-message' : 'other-message'} mb-3`}
                         >
                             <MessageBox data={item} index={index} />
                         </div>
@@ -47,3 +58,5 @@ const MessagesWrapper = ({ files }) => {
 }
 
 export default MessagesWrapper
+
+
