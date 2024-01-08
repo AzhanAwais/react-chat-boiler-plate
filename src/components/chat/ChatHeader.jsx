@@ -7,7 +7,6 @@ import BlockUserPopup from '../popup/BlockUserPopup';
 import DeleteChatPopup from '../popup/DeleteChatPopup';
 import { useSelector } from 'react-redux';
 import { getBlockStatus, getImageUrl } from '../../utils/helper';
-import { GetAuthUserLocalStorage } from '../../services/localStorage/localStorage';
 
 const ChatHeader = () => {
     const { selectedChat } = useSelector((state) => state?.chat)
@@ -71,7 +70,6 @@ const ChatHeader = () => {
                                                     <span>Block User</span>
                                                 </li>
                                         }
-
                                     </>
                                 }
                                 <li className='cursor' onClick={() => setDeleteChatPopup(true)}>
@@ -81,7 +79,7 @@ const ChatHeader = () => {
                         </DropdownButton>
                     </div>
                 </div>
-            </div>
+             </div>
 
             <BlockUserPopup blockUserPopup={blockUserPopup} setBlockUserPopup={setBlockUserPopup} />
             <UnblockUserPopup unblockUserPopup={unblockUserPopup} setUnblockUserPopup={setUnblockUserPopup} />
