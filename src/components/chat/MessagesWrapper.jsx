@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setMessages } from '../../store/slices/chatSlice'
 import { errorMsg } from '../../constants/msg'
 
-const MessagesWrapper = ({ files }) => {
+const MessagesWrapper = ({ files, socket }) => {
     const dispatch = useDispatch()
     const currUser = GetAuthUserLocalStorage()
     const { selectedChat, messages } = useSelector((state) => state?.chat)
@@ -49,7 +49,7 @@ const MessagesWrapper = ({ files }) => {
                             key={index}
                             className={`${item?.sender?._id == currUser?._id ? 'my-message' : 'other-message'} mb-3`}
                         >
-                            <MessageBox data={item} index={index} />
+                            <MessageBox data={item} index={index} socket={socket} />
                         </div>
                     ))
             }

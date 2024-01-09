@@ -15,7 +15,7 @@ const LogoutPopup = ({ logoutPopup, setLogoutPopup , socket}) => {
     const handleLogout = async () => {
         const { data, error } = await logout()
         if (data) {
-            socket.emit('getOfflineUser')
+            socket.emit('getOfflineUser', currUser)
             EmptyLocalStorage()
             navigate("/")
         }

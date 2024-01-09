@@ -45,7 +45,7 @@ const MyProfile = ({socket}) => {
                 </div>
             </div>
 
-            <StartChatPopup startChatPopup={startChatPopup} setStartChatPopup={setStartChatPopup} />
+            <StartChatPopup startChatPopup={startChatPopup} setStartChatPopup={setStartChatPopup} socket={socket} />
             <CreateGroupPopup createGroupPopup={createGroupPopup} setCreateGroupPopup={setCreateGroupPopup} socket={socket} />
             <LogoutPopup logoutPopup={logoutPopup} setLogoutPopup={setLogoutPopup}  socket={socket}/>
         </>

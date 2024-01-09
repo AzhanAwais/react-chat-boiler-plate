@@ -13,12 +13,12 @@ import { errorMsg } from '../../constants/msg'
 import { useDispatch, useSelector } from 'react-redux'
 import { setMessages } from '../../store/slices/chatSlice'
 
-const MessageBox = ({ data, index }) => {
+const MessageBox = ({ data, index, socket }) => {
     const dispatch = useDispatch()
     const currUser = GetAuthUserLocalStorage()
     const [isOpen, setIsOpen] = useState(false)
     const [deleteMessage, { isLoading }] = useDeleteMessageMutation()
-    const { messages } = useSelector((state) => state?.chat)
+    const { messages, selectedChat } = useSelector((state) => state?.chat)
 
     const getMessage = {
         [messageTypes.text]: <TextMessage data={data} />,
@@ -29,11 +29,18 @@ const MessageBox = ({ data, index }) => {
     }
 
     const handleDeleteMessage = async () => {
+        const chatId = selectedChat?.data?._id
         const messageId = data?._id
+
         const { data: resData, error } = await deleteMessage(messageId)
         if (resData) {
-            let temp = [...messages]
-            temp[index].isDeleted = true
+            socket.emit("deleteMessage", {
+                chatId: chatId,
+                message: resData?.data,
+                currUser:currUser
+            })
+            let temp = [...messages?.data]
+            temp[index] = { ...temp[index], isDeleted: true };
             dispatch(setMessages({ data: temp, pagination: null }))
         }
         else {

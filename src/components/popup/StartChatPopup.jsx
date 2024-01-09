@@ -16,7 +16,7 @@ import { errorMsg, successMsg } from '../../constants/msg';
 import { setChatsUserList, setSearchUsers, setSelectedChat } from '../../store/slices/chatSlice';
 import { GetAuthUserLocalStorage } from '../../services/localStorage/localStorage';
 
-const StartChatPopup = ({ startChatPopup, setStartChatPopup }) => {
+const StartChatPopup = ({ startChatPopup, setStartChatPopup, socket }) => {
     const { handleSubmit, register, control, reset, watch, setValue, getValues, formState: { errors } } = useForm({ mode: 'onChange' })
     const dispatch = useDispatch()
     const currUser = GetAuthUserLocalStorage()
@@ -34,6 +34,7 @@ const StartChatPopup = ({ startChatPopup, setStartChatPopup }) => {
         }
         const { data, error } = await startChat(apiData)
         if (data) {
+            socket.emit('startChat', { chat: data?.data , currUser: currUser})
             let user = data?.data?.sender?._id == currUser?._id ? data?.data?.receiver : data?.data?.sender
             dispatch(setSelectedChat({ data: data?.data, user: user }))
             dispatch(setChatsUserList({ data: [...chatsUserList?.data, data?.data], pagination: null }))

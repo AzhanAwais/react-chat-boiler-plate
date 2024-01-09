@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { GetAuthUserLocalStorage } from '../../services/localStorage/localStorage';
 import { useCreateGroupMutation, useLazySearchUsersQuery } from '../../store/apis/chatApi';
 import { useDebounce } from 'use-debounce';
-import { setSearchUsers, setSelectedChat } from '../../store/slices/chatSlice';
+import { setChatsUserList, setSearchUsers, setSelectedChat } from '../../store/slices/chatSlice';
 import { errorMsg, successMsg } from '../../constants/msg';
 import CustomTextarea from '../form/CustomTextarea';
 import CustomInput from '../form/CustomInput';
@@ -25,7 +25,7 @@ const CreateGroupPopup = ({ createGroupPopup, setCreateGroupPopup , socket}) => 
     const dispatch = useDispatch()
     const [groupImage] = watch(['groupImage'])
     const currUser = GetAuthUserLocalStorage()
-    const { searchUsers } = useSelector((state) => state?.chat)
+    const { searchUsers , chatsUserList} = useSelector((state) => state?.chat)
     const [searchText, setSearchText] = useState("")
     const [search] = useDebounce(searchText, 800)
     const [allSearchUsers, { isLoading }] = useLazySearchUsersQuery()
@@ -51,6 +51,10 @@ const CreateGroupPopup = ({ createGroupPopup, setCreateGroupPopup , socket}) => 
         const { data, error } = await createGroup(formData)
         if (data) {
             socket.emit("groupCreated", { group: data?.data })
+            socket.emit('joinRoom', currUser)
+            let temp = [...chatsUserList?.data]
+            temp.push( data?.data )
+            dispatch(setChatsUserList({ data: temp, user: null }))
             dispatch(setSelectedChat({ data: data?.data, user: null }))
             successMsg(data.message)
             setCreateGroupPopup(false)

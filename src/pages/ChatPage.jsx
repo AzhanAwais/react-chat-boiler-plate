@@ -9,7 +9,7 @@ import MessageInput from '../components/chat/MessageInput'
 import UploadedFiles from '../components/chat/UploadedFiles'
 import NoChatSelected from '../components/chat/NoChatSelected'
 import { useDispatch, useSelector } from 'react-redux'
-import { getOfflineUser, getOnlineUser, groupCreated, onMessage } from '../services/chat/chat'
+import { getOfflineUser, getOnlineUser, groupCreated, onMessage, deleteMessage, startChat } from '../services/chat/chat'
 import { useLazyGetChatUsersQuery } from '../store/apis/chatApi'
 import { errorMsg } from '../constants/msg'
 import { setChatsUserList } from '../store/slices/chatSlice'
@@ -45,6 +45,7 @@ const ChatPage = ({ socket }) => {
     }, [])
 
     useEffect(() => {
+
         socket.on("getOnlineUser", (userData) => {
             getOnlineUser(dispatch, chatsUserList, userData)
         })
@@ -53,7 +54,13 @@ const ChatPage = ({ socket }) => {
             getOfflineUser(dispatch, chatsUserList, userData)
         })
 
+        socket.on("startChat", (data) => {
+            socket.emit('joinRoom', currUser)
+            startChat(dispatch, chatsUserList, data)
+        })
+
         socket.on("groupCreated", (data) => {
+            socket.emit('joinRoom', currUser)
             groupCreated(dispatch, chatsUserList, data)
         })
 
@@ -61,11 +68,16 @@ const ChatPage = ({ socket }) => {
             onMessage(dispatch, messages, data)
         })
 
+        socket.on("deleteMessage", (data) => {
+            deleteMessage(dispatch, messages, data)
+        })
+
         return () => {
             socket.off("getOnlineUser")
             socket.off("getOfflineUser")
             socket.off("groupCreated")
             socket.off("message")
+            socket.off("deleteMessage")
         }
     }, [dispatch, messages])
 
@@ -87,7 +99,7 @@ const ChatPage = ({ socket }) => {
                                 selectedChat?.data ?
                                     <>
                                         <ChatHeader />
-                                        <MessagesWrapper files={files} />
+                                        <MessagesWrapper files={files} socket={socket} />
                                         <UploadedFiles files={files} setFiles={setFiles} />
                                         <MessageInput
                                             message={message}

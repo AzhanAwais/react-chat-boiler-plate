@@ -103,10 +103,11 @@ const MessageInput = ({ message, setMessage, files, setFiles, socket }) => {
 
         const { data, error } = await sendMessage(formData)
         if (data) {
-            dispatch(setMessages({ data: [...messages?.data, data?.data], pagination: null }))
+            // dispatch(setMessages({ data: [...messages?.data, data?.data], pagination: null }))
             socket.emit("message", {
                 chatId: selectedChat?.data?._id,
-                messageData: data?.data
+                messageData: data?.data,
+                currUser:currUser
             })
             resetForm()
         }
