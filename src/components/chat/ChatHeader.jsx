@@ -7,12 +7,23 @@ import BlockUserPopup from '../popup/BlockUserPopup';
 import DeleteChatPopup from '../popup/DeleteChatPopup';
 import { useSelector } from 'react-redux';
 import { getBlockStatus, getImageUrl } from '../../utils/helper';
+import { MdOutlineCall } from "react-icons/md";
+import { IoVideocamOutline } from "react-icons/io5";
+import { GetAuthUserLocalStorage } from '../../services/localStorage/localStorage';
+import { useCreateRoomCodesMutation, useCreateRoomMutation } from '../../store/apis/ms100Api';
+import { errorMsg } from '../../constants/msg';
+import { useHMSActions } from '@100mslive/react-sdk';
+import { roles100ms, templates } from '../../utils/constants';
 
 const ChatHeader = () => {
+    const hmsActions = useHMSActions()
+    const currUser = GetAuthUserLocalStorage()
     const { selectedChat } = useSelector((state) => state?.chat)
     const [blockUserPopup, setBlockUserPopup] = useState(false)
     const [unblockUserPopup, setUnblockUserPopup] = useState(false)
     const [deleteChatPopup, setDeleteChatPopup] = useState(false)
+    const [createRoom] = useCreateRoomMutation()
+    const [createRoomCode] = useCreateRoomCodesMutation()
 
     const getChatInfo = () => {
         let url = ""
@@ -28,6 +39,34 @@ const ChatHeader = () => {
         }
 
         return { url, name }
+    }
+
+    const startAudioCall = async () => {
+        try {
+            const { data, error } = await createRoom({
+                name: selectedChat?.data?._id,
+                template_id: templates?.audioTemplate,
+                description: ""
+            })
+            if (data) {
+                const roomId = data?.id
+                const { data: roomCodeData, error: roomCodeError } = await createRoomCode(roomId)
+                if (roomCodeData) {
+                    const [speaker] = roomCodeData?.data.filter((item) => item?.role == roles100ms.speaker)
+                    const authToken = await hmsActions.getAuthTokenByRoomCode({ roomCode: speaker?.code })
+                    const res = await hmsActions.join({ userName: currUser?.fullname, authToken })
+                }
+                else {
+                    errorMsg(roomCodeError.data.message)
+                }
+            }
+            else {
+                errorMsg(error.data.message)
+            }
+        }
+        catch (e) {
+            errorMsg(e)
+        }
     }
 
     return (
@@ -54,7 +93,9 @@ const ChatHeader = () => {
                         </div>
                     </div>
 
-                    <div>
+                    <div className='d-flex align-items-center'>
+                        <span onClick={startAudioCall}><MdOutlineCall className='text-grey me-3 cursor' size={24} /></span>
+                        <span><IoVideocamOutline className='text-grey me-3 cursor' size={24} /></span>
                         <DropdownButton title={<BsThreeDotsVertical size={24} />}>
                             <ul >
                                 {
@@ -79,7 +120,7 @@ const ChatHeader = () => {
                         </DropdownButton>
                     </div>
                 </div>
-             </div>
+            </div>
 
             <BlockUserPopup blockUserPopup={blockUserPopup} setBlockUserPopup={setBlockUserPopup} />
             <UnblockUserPopup unblockUserPopup={unblockUserPopup} setUnblockUserPopup={setUnblockUserPopup} />

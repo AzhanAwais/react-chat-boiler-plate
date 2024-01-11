@@ -3,6 +3,7 @@ import { apiSlice } from '../../store/apis/index'
 
 export const chatApi = apiSlice
     .injectEndpoints({
+        tagTypes: ['chatUsers'],
         endpoints: builder => ({
             getChatUsers: builder.query({
                 query: () => `${apiUrl.chatUsers}`,
@@ -83,3 +84,5 @@ export const {
     useUnblockUserMutation,
     useDeleteChatMutation,
 } = chatApi
+
+export default chatApi

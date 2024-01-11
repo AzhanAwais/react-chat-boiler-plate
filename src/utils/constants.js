@@ -5,8 +5,10 @@ export const constant = {
     LOCAL_STORAGE_USER: "CHAT_USER",
     LOCAL_STORAGE_ROLE: "",
     BASE_URL: "http://localhost:4000",
+    MS100_BASE_URL: "https://api.100ms.live/v2",
     IMAGE_DIR_NAME: "images",
-    VIDEO_DIR_NAME: "videos"
+    VIDEO_DIR_NAME: "videos",
+    TOKEN_100_MS: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MDQ5NTQ0ODEsImV4cCI6MTcwNTA0MDg4MSwianRpIjoiand0X25vbmNlIiwidHlwZSI6Im1hbmFnZW1lbnQiLCJ2ZXJzaW9uIjoyLCJuYmYiOjE3MDQ5NTQ0ODEsImFjY2Vzc19rZXkiOiI2NTlmOGE0YjY3MjYxNjMzMWViYWFmY2YifQ.BqLy_kEuM1C4IiHol9YO4d7fax36Mj35myEzCZzGM-4"
 }
 
 export const messageTypes = {
@@ -20,6 +22,10 @@ export const messageTypes = {
 export const roles = {
     admin: 1,
     user: 2
+}
+
+export const templates = {
+    audioTemplate: "659f8a97cd666ed1654e1f02"
 }
 
 export const apiUrl = {
@@ -37,6 +43,17 @@ export const apiUrl = {
     blockChatUser: "/api/chat/block-user",
     unblockChatUser: "/api/chat/unblock-user",
     deleteChat: "/api/chat/delete-chat",
+}
+
+export const apiUrl100ms = {
+    rooms: "/rooms",
+    roomCodes: "/room-codes/room"
+}
+
+export const roles100ms = {
+    speaker: "speaker",
+    listner: "listner",
+    moderator: "moderator"
 }
 
 export const s3Credential = {
